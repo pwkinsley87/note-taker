@@ -1,19 +1,18 @@
-const { filterByQuery } = require("../../../zookeepr/lib/animals");
-const { notes } = require("../../lib/notes");
-const router = require("express").Router();
-const { newNote, getNotes } = require("../../lib/notes");
+const router = require('express').Router();
+const { addNote, deleteNote } = require('../../lib/notes');
+let { notesArray } = require('../../db/notes');
 
-router.get("/notes", (req, res) => {
-    let newNote = notes;
-    if (req.query) {
-        results = filterByQuery(req.query, results);
-    }
+router.get('/notes', (req, res) => {
+    let results = notesArray;
     res.json(results);
 });
 
-router.post("/notes", (req, res) => {
-    req.body.id = notes.toString();
-
-    const newNote = addNewNote(req.body, notes);
-    res.json(newNote);
+router.post('/notes', (req, res) => {
+    if(notesArray){
+        req.body.id = notesArray.length.toString();
+    } else 
+    {req.body.id = 0}
+    res.json(addNote(req.body, notesArray));
 });
+
+module.exports = router;
